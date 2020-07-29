@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/binary"
 	"errors"
-	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
-	"github.com/google/gopacket/pfring"
 	"log"
 	"net"
 	"sync"
 	"time"
+
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
+	"github.com/google/gopacket/pfring"
 )
 
 func main() {
@@ -82,6 +83,10 @@ func scan(iface *net.Interface) error {
 	}
 	if err = handle.SetSocketMode(pfring.WriteAndRead); err != nil {
 		log.Fatalln("pfring SetSocketMode error:", err)
+	}
+
+	if err = handle.Enable(); err != nil {
+		log.Fatalln("pfring enable error:", err)
 	}
 	defer handle.Close()
 
@@ -183,4 +188,3 @@ func ips(n *net.IPNet) (out []net.IP) {
 	}
 	return
 }
-
